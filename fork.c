@@ -1,12 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include "fork.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     Pids *pid_container = create_shared_memory();
     pid_container->parent = getpid();
@@ -25,9 +25,36 @@ int main()
 
     if (getpid() == pid_container->parent)
     {
-        waitpid(pid_container->children.first, NULL, 0);
-        waitpid(pid_container->children.second, NULL, 0);
-        print_pids(*pid_container);
+
+        if (argc > 1 && strcmp(argv[1], "sleep") == 0)
+        {
+            int printed = 0;
+            while (1)
+            {
+                if (!printed)
+                {
+                    if (pid_container->grandchildren[0] &&
+                        pid_container->grandchildren[1] &&
+                        pid_container->grandchildren[2] &&
+                        pid_container->grandchildren[3])
+                    {
+                        print_pids(*pid_container);
+                        printed = 1;
+                    }
+                }
+            };
+        }
+        else
+        {
+            waitpid(pid_container->children.first, NULL, 0);
+            waitpid(pid_container->children.second, NULL, 0);
+            print_pids(*pid_container);
+        }
+    }
+    if (argc > 1 && strcmp(argv[1], "sleep") == 0)
+    {
+        while (1)
+            ;
     }
     return 0;
 }
