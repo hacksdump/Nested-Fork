@@ -16,7 +16,7 @@ struct pids_init
 {
     int parent;
     struct children_struct children;
-    int grandchildren[4];
+    struct grandchildren_struct grandchildren;
 } pids_default = {0, {0, 0}, {0, 0, 0, 0}};
 typedef struct pids_init Pids;
 

@@ -15,12 +15,12 @@ int main(int argc, char *argv[])
 
     if (getpid() == pid_container->children.first)
     {
-        create_two_children(&pid_container->grandchildren[0], &pid_container->grandchildren[1]);
+        create_two_children(&pid_container->grandchildren.first, &pid_container->grandchildren.second);
     }
 
     if (getpid() == pid_container->children.second)
     {
-        create_two_children(&pid_container->grandchildren[2], &pid_container->grandchildren[3]);
+        create_two_children(&pid_container->grandchildren.third, &pid_container->grandchildren.fourth);
     }
 
     if (getpid() == pid_container->parent)
@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
             {
                 if (!printed)
                 {
-                    if (pid_container->grandchildren[0] &&
-                        pid_container->grandchildren[1] &&
-                        pid_container->grandchildren[2] &&
-                        pid_container->grandchildren[3])
+                    if (pid_container->grandchildren.first &&
+                        pid_container->grandchildren.second &&
+                        pid_container->grandchildren.third &&
+                        pid_container->grandchildren.fourth)
                     {
                         print_pids(*pid_container);
                         printed = 1;
@@ -70,10 +70,10 @@ void print_pids(Pids pid_container)
 {
     printf("Children: %d %d\n", pid_container.children.first, pid_container.children.second);
     printf("Grandchildren: %d %d %d %d\n",
-           pid_container.grandchildren[0],
-           pid_container.grandchildren[1],
-           pid_container.grandchildren[2],
-           pid_container.grandchildren[3]);
+           pid_container.grandchildren.first,
+           pid_container.grandchildren.second,
+           pid_container.grandchildren.third,
+           pid_container.grandchildren.fourth);
     printf("Parent: %d\n", pid_container.parent);
 }
 
